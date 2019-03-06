@@ -1,1 +1,250 @@
-test
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Ubuntu:300, 400, 500, 700">
+  <style>
+    *,
+    *:after,
+    *:before {
+      margin: 0;
+      padding: 0;
+    }
+
+    .svg-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    svg {
+      path {
+        transition: .1s;
+      }
+
+      &:hover path {
+        d: path("M 800 300 Q 400 250 0 300 L 0 0 L 800 0 L 800 300 Z");
+      }
+    }
+
+    body {
+      background: #fcfcfc;
+      color: #333;
+      font-family: 'Ubuntu', sans-serif;
+      position: relative;
+    }
+
+    h3 {
+      font-weight: 400;
+    }
+
+    header {
+      color: #fff;
+      padding-top: 10vw;
+      padding-bottom: 30vw;
+      text-align: center;
+    }
+
+    main {
+      background: linear-gradient(to bottom, #fcfcfc 0%, #fcfcfc 100%);
+      border-bottom: 1px solid rgba(0, 0, 0, .2);
+      padding: 10vh 0 80vh;
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+
+      &::after {
+        border-right: 2px dashed #eee;
+        content: '';
+        position: absolute;
+        top: calc(10vh + 1.618em);
+        bottom: 0;
+        left: 50%;
+        width: 2px;
+        height: 100%;
+      }
+    }
+
+    footer {
+      background: #ececec;
+      padding: 5vh 0;
+      text-align: center;
+      position: relative;
+    }
+
+    small {
+      opacity: .5;
+      font-weight: 300;
+
+      a {
+        color: inherit;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <script src="https://unpkg.com/vue"></script>
+  <script src="https://unpkg.com/element-ui"></script>
+  <script src="https://unpkg.com/el-search-table-pagination"></script>
+  <script src="db.js"></script>
+
+  <div class="svg-container">
+    <!-- I crated SVG with: https://codepen.io/anthonydugois/pen/mewdyZ -->
+    <svg viewbox="0 0 800 400" class="svg">
+      <path id="curve" fill="#50c6d8" d="M 800 300 Q 400 350 0 300 L 0 0 L 800 0 L 800 300 Z">
+      </path>
+    </svg>
+  </div>
+
+  <header>
+    <h1>白貓角色ID资料搜索</h1>
+    <h3>向下滑动开始使用</h3>
+  </header>
+
+  <main style="padding-bottom: 0px;">
+    <div id="app"></div>
+    <script type="text/javascript">
+      new Vue({
+        el: '#app',
+        data: {
+          formOptions: {
+            inline: true,
+            submitBtnText: '搜索',
+            forms: [{
+                prop: 'name',
+                label: '角色',
+                fuzzy: true // 模糊查询
+              },
+              {
+                prop: 'cid',
+                label: 'ID',
+                fuzzy: true
+              },
+              {
+                prop: 'career',
+                label: '职业',
+                itemType: 'select',
+                options: [{
+                    value: '',
+                    label: '全部'
+                  },
+                  {
+                    value: 1,
+                    label: '剑'
+                  },
+                  {
+                    value: 2,
+                    label: '拳'
+                  },
+                  {
+                    value: 3,
+                    label: '斧'
+                  },
+                  {
+                    value: 4,
+                    label: '枪'
+                  },
+                  {
+                    value: 5,
+                    label: '弓'
+                  },
+                  {
+                    value: 6,
+                    label: '法'
+                  },
+                  {
+                    value: 7,
+                    label: '双'
+                  },
+                  {
+                    value: 8,
+                    label: '龙'
+                  },
+                  {
+                    value: 9,
+                    label: '变'
+                  },
+                  {
+                    value: 10,
+                    label: '大剑'
+                  },
+                  {
+                    value: 11,
+                    label: '辉剑'
+                  }
+                ]
+              }
+            ]
+          },
+          columns: [{
+              prop: 'name',
+              label: '角色',
+              minWidth: 100,
+              align: 'center',
+              render: row => {
+                const {
+                  name
+                } = row
+                return name.split(":")[0]
+              }
+            },
+            {
+              prop: 'cid',
+              label: 'ID',
+              Width: 120,
+              align: 'center',
+            },
+            {
+              prop: 'career',
+              label: '职业',
+              width: 50,
+              align: 'center',
+              render: row => {
+                const {
+                  career
+                } = row
+                return ["未知", "剑", "拳", "斧", "枪", "弓", "法", "双", "龙", "变", "大剑", "辉剑"][career]
+              }
+            },
+            {
+              prop: 'comment',
+              label: '备注',
+              minWidth: 70,
+              align: 'center',
+              render: row => {
+                const {
+                  comment
+                } = row
+                return comment.replace("jp", "日版")
+              }
+            }
+          ],
+          tableData: getCharacterData()
+        },
+        template: `
+      <el-search-table-pagination
+        type="local"
+        :data="tableData"
+        :page-sizes="[10, 30, 50]"
+        :columns="columns"
+        :form-options="formOptions">
+      </el-search-table-pagination>
+    `
+      })
+    </script>
+  </main>
+
+  <footer>
+    <p>©2019&nbsp;WcatID&nbsp;</p>
+    <small>🕷&nbsp;数据协力:&nbsp;法克缇斯·羽&nbsp;&nbsp;资料参考:&nbsp;<a href="https://shironekoproject.fandom.com/zh/wiki/">白貓Project維基</a></small>
+  </footer>
+</body>
+
+
+</html>
