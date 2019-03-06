@@ -119,21 +119,24 @@
             submitBtnText: '搜索',
             forms: [{
                 prop: 'name',
-                label: '角色',
+                //label: '角色',
+                //size: 'small',
+                placeholder: '角色',
                 fuzzy: true // 模糊查询
               },
               {
                 prop: 'cid',
-                label: 'ID',
+                //label: 'ID',
+                placeholder: 'ID',
                 fuzzy: true
               },
               {
                 prop: 'career',
-                label: '职业',
+                //label: '职业',
                 itemType: 'select',
                 options: [{
                     value: '',
-                    label: '全部'
+                    label: '全部职业'
                   },
                   {
                     value: 1,
@@ -198,13 +201,15 @@
             {
               prop: 'cid',
               label: 'ID',
-              Width: 120,
+              minWidth: 100,
+              //Width: 120,
               align: 'center',
             },
             {
               prop: 'career',
               label: '职业',
-              width: 50,
+              minWidth: 50,
+              //width: 50,
               align: 'center',
               render: row => {
                 const {
@@ -216,7 +221,8 @@
             {
               prop: 'comment',
               label: '备注',
-              minWidth: 70,
+              minWidth: 60,
+              //minWidth: 70,
               align: 'center',
               render: row => {
                 const {
