@@ -48,7 +48,7 @@ function init() {
 
   var loader = new THREE.FBXLoader();
   arr_models = ["ply_20705440", "ply_20505430", "ply_20605450", "ply_20304520",
-    "ply_20600770", "ply_20903760"
+    "ply_20600770", "ply_20903760", "ply_20604940"
   ]
   var model_fn = "models/" + arr_models[Math.floor(Math.random() * arr_models.length)] + ".fbx";
   loader.load(model_fn, function(object) {
